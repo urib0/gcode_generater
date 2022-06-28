@@ -16,4 +16,16 @@ def parser():
     args = argparser.parse_args()
     return args
 
-print(parser())
+arg = parser()
+
+# ファイルの存在チェック
+input_file_name = arg.filename if arg.filename else "input.txt"
+input_file_path = os.path.join(os.getcwd(), input_file_name)
+output_file_name = arg.another_file if arg.another_file else "output.txt"
+output_file_path = os.path.join(os.getcwd(), output_file_name)
+
+if not os.path.isfile(input_file_path):
+    print(f"file does not exist:{input_file_name}")
+    exit(0)
+
+
