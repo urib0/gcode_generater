@@ -16,6 +16,21 @@ def parser():
     args = argparser.parse_args()
     return args
 
+def g2dict(input_):
+    #* inputをコマンドと引数のリストに分け，リストにする
+    splited_input = input_.split(' ')
+    codeName = splited_input[:1]
+    param_E = [splited_input[i][1:] for i in range(1, len(splited_input))]
+    param_S = [splited_input[i][:1].upper() for i in range(1, len(splited_input))]
+    param = {param_S[i]:param_E[i] for i in range(0, len(splited_input)-1)}
+
+    #* 作ったリストをソートし，元の体裁で返す
+    param = sorted(param.items())
+    locations = [param[i][0] for i in range(0, len(param))]
+    values = [float(param[i][1])for i in range(0, len(param))]
+    newParam = dict(zip(locations, values))
+    return newParam
+
 arg = parser()
 
 # ファイルの存在チェック
@@ -32,6 +47,28 @@ if not os.path.isfile(input_file_path):
 with open(input_file_path,"r") as f:
     lines = f.readlines()
 
+target = {
+    "X": 0,
+    "Y": 0,
+    "Z": 0,
+    "R": 0,
+    "P": 0
+}
+
 for line in lines:
 	if not line[0] in ["#","\n"]:
-		print(line.split(","))
+		step = int(line.split(",")[0])
+		gstart = g2dict(line.split(",")[1])
+		gend = g2dict(line.split(",")[2])
+		for i in range(step+1):
+			for pos in gstart.keys():
+				diff = i*(gend[pos]-gstart[pos])/step
+				target[pos] = gstart[pos]+diff
+			gcode = f'G1 X{target["X"]} Y{target["Y"]} Z{target["Z"]} R{target["R"]} P{target["P"]}'
+			print(gcode)
+
+
+
+
+
+
