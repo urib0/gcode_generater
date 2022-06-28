@@ -55,22 +55,22 @@ target = {
     "P": 0
 }
 
-for line in lines:
-	if not line[0] in ["#","\n"]:
-		step = int(line.split(",")[0])
-		gstart = g2dict(line.split(",")[1])
-		gend = g2dict(line.split(",")[2])
-		if step != 0:
-			for i in range(step+1):
-				for pos in gstart.keys():
-					diff = i*(gend[pos]-gstart[pos])/step
-					target[pos] = format(gstart[pos]+diff,".1f")
-				gcode = f'G1 X{target["X"]} Y{target["Y"]} Z{target["Z"]} R{target["R"]} P{target["P"]}'
-				print(gcode)
-		else:
-			gcode = f'G1 X{gstart["X"]} Y{gstart["Y"]} Z{gstart["Z"]} R{gstart["R"]} P{gstart["P"]}'
-		print(str(gcode))
-
+with open(output_file_path,"w") as f:
+	for line in lines:
+		if not line[0] in ["#","\n"]:
+			step = int(line.split(",")[0])
+			gstart = g2dict(line.split(",")[1])
+			gend = g2dict(line.split(",")[2])
+			if step != 0:
+				for i in range(step+1):
+					for pos in gstart.keys():
+						diff = i*(gend[pos]-gstart[pos])/step
+						target[pos] = format(gstart[pos]+diff,".1f")
+					gcode = f'G1 X{target["X"]} Y{target["Y"]} Z{target["Z"]} R{target["R"]} P{target["P"]}'
+					f.write(gcode+"\n")
+			else:
+				gcode = f'G1 X{gstart["X"]} Y{gstart["Y"]} Z{gstart["Z"]} R{gstart["R"]} P{gstart["P"]}'
+				f.write(gcode+"\n")
 
 
 
