@@ -28,4 +28,10 @@ if not os.path.isfile(input_file_path):
     print(f"file does not exist:{input_file_name}")
     exit(0)
 
+# 入力ファイル読み込み
+with open(input_file_path,"r") as f:
+    lines = f.readlines()
 
+for line in lines:
+	if not line[0] in ["#","\n"]:
+		print(line.split(","))
